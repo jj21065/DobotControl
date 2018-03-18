@@ -1,0 +1,80 @@
+﻿<Window x:Class="DobotControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:h="http://helix-toolkit.org/wpf/SharpDX"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DobotControl"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="545.522" Width="768.734" Visibility="Visible" BorderThickness="1" Opacity="0.995" ResizeMode="CanResizeWithGrip">
+    <Grid>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="Connect_bt" Content="Connect Dobot" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="104" Height="36" Click="OnConnect_Click"/>
+            <GroupBox x:Name="InfoGroup" Header="Machine Coordinate" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Height="130" Width="213">
+                <Grid Margin="0,3,2,-12">
+                    <TextBox x:Name="Xtext" HorizontalAlignment="Left" Height="23" Margin="5,22,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" RenderTransformOrigin="0.888,4.932"/>
+                    <TextBox x:Name="Ytext" HorizontalAlignment="Left" Height="23" Margin="68,22,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                    <TextBox x:Name="Ztext" HorizontalAlignment="Left" Height="23" Margin="131,22,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                    <Label x:Name="label" Content="X" HorizontalAlignment="Left" Margin="6,2,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy" Content="Y" HorizontalAlignment="Left" Margin="69,2,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy1" Content="Z" HorizontalAlignment="Left" Margin="132,2,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="J1text" HorizontalAlignment="Left" Height="23" Margin="5,84,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" RenderTransformOrigin="0.888,4.932"/>
+                    <TextBox x:Name="J2text" HorizontalAlignment="Left" Height="23" Margin="68,84,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                    <TextBox x:Name="J3text" HorizontalAlignment="Left" Height="23" Margin="131,84,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="68"/>
+                </Grid>
+
+            </GroupBox>
+            <GroupBox x:Name="ControlGroup" Header="Control" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Height="85" Width="494">
+                <Grid Margin="4,-6,-2,-12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="56*"/>
+                        <ColumnDefinition Width="53*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="Xplus_bt" Content="X+" HorizontalAlignment="Left" Margin="0,19,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                    <Button x:Name="Xminus_bt" Content="X-" HorizontalAlignment="Left" Margin="0,43,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                    <Button x:Name="Yplus_bt" Content="Y+" HorizontalAlignment="Left" Margin="80,19,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                    <Button x:Name="Yminus_bt" Content="Y-" HorizontalAlignment="Left" Margin="80,43,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                    <Button x:Name="Zplus_bt" Content="Z+" HorizontalAlignment="Left" Margin="162,19,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                    <Button x:Name="Zminus_bt" Content="Z-" HorizontalAlignment="Left" Margin="162,43,0,0" VerticalAlignment="Top" Width="75" PreviewMouseDown="OnMoveEvent" PreviewMouseUp="OnMoveEvent"/>
+                </Grid>
+            </GroupBox>
+            <Grid x:Name="scene" HorizontalAlignment="Left" Margin="228,141,0,0" Width="468" Height="319" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <h:Viewport3DX x:Name="hVp3D" BorderBrush="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
+                    <h:AmbientLight3D/>
+                    <h:SpotLight3D/>
+                    <h:GroupModel3D x:Name="ModelGroup">
+
+                    </h:GroupModel3D>
+
+
+                </h:Viewport3DX>
+            </Grid>
+            <Button x:Name="button" Content="Set Origin" HorizontalAlignment="Left" Margin="228,10,0,0" VerticalAlignment="Top" Width="98" Height="36" Click="button_Click"/>
+            <GroupBox x:Name="InfoGroup_Copy" Header="Self-define Coordinate" HorizontalAlignment="Left" Margin="10,286,0,0" VerticalAlignment="Top" Height="73" Width="213">
+                <Grid Margin="0,0,2,-9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="sdXtext" HorizontalAlignment="Left" Height="23" Margin="5,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58" RenderTransformOrigin="0.888,4.932"/>
+                    <TextBox x:Name="sdYtext" HorizontalAlignment="Left" Height="23" Margin="68,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                    <TextBox x:Name="sdZtext" HorizontalAlignment="Left" Height="23" Margin="131,27,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="58"/>
+                    <Label x:Name="label1" Content="X" HorizontalAlignment="Left" Margin="6,5,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy2" Content="Y" HorizontalAlignment="Left" Margin="69,5,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy3" Content="Z" HorizontalAlignment="Left" Margin="132,5,0,0" VerticalAlignment="Top"/>
+                </Grid>
+
+            </GroupBox>
+
+        </Grid>
+
+
+    </Grid>
+</Window>
