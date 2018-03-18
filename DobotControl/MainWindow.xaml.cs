@@ -83,8 +83,9 @@ namespace DobotControl
             }
             Rect3D initView = new Rect3D(new Point3D(0, 0, 0), new Size3D(100, 100, 100));
             ResetCameraPosition(initView);
-            LoadModel(".\\SetupParts\\articulator2.stl");
+          // LoadModel(".\\SetupParts\\articulator2.stl");
            LoadModel(".\\SetupParts\\calibratePart.stl");
+            LoadModel(".\\SetupParts\\邱灃毅_LPlaster.stl");
             PhongMaterial material = new PhongMaterial
             {
                 ReflectiveColor = SharpDX.Color.Black,
