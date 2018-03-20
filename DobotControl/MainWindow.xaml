@@ -29,7 +29,7 @@
 
             </GroupBox>
             <GroupBox x:Name="ControlGroup" Header="Control" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Height="85" Width="494">
-                <Grid Margin="4,-6,-2,-12">
+                <Grid Margin="0,-6,2,-12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="56*"/>
                         <ColumnDefinition Width="53*"/>
@@ -47,9 +47,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <h:Viewport3DX x:Name="hVp3D" BorderBrush="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
-                    <h:AmbientLight3D/>
-                    <h:SpotLight3D/>
+                <h:Viewport3DX x:Name="hVp3D" BackgroundColor="Black" >
+                   
                     <h:GroupModel3D x:Name="ModelGroup">
 
                     </h:GroupModel3D>

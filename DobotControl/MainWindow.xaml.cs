@@ -40,7 +40,7 @@ namespace DobotControl
         private List<String> inital_filepath = new List<String>();
 
         //new coordinate of aritculator
-        private Point3D articulator_coor = new Point3D(0,0,0);
+        private Point3D articulator_coor = new Point3D(0, 0, 0);
         //self-define origin after set origin
         private Point3D sd_origin = new Point3D(0, 0, 0);
 
@@ -54,7 +54,7 @@ namespace DobotControl
             Rect3D initView = new Rect3D(new Point3D(0, 0, 0), new Size3D(100, 100, 100));
             ResetCameraPosition(initView);
             LoadModel(".\\SetupParts\\articulator2.stl");
-            LoadModel(".\\SetupParts\\calibratePart.stl");
+            LoadModel(".\\SetupParts\\final splint.stl");
             PhongMaterial material = new PhongMaterial
             {
                 ReflectiveColor = SharpDX.Color.Black,
@@ -64,44 +64,49 @@ namespace DobotControl
                 SpecularShininess = 60,
                 DiffuseColor = SharpDX.Color.Red
             };
-         
+
             MeshGeometryModel3D model = ModelGroup.Children[1] as MeshGeometryModel3D;
             model.Material = material;
-            
+
 
 
         }
         public MainWindow(String[] filepath)
         {
-     
-           
+
+
 
             InitializeComponent();
-            for (int i = 0; i != filepath.Length; ++i)
-            {
-                MessageBox.Show(filepath[i]);
-            }
+            
             Rect3D initView = new Rect3D(new Point3D(0, 0, 0), new Size3D(100, 100, 100));
             ResetCameraPosition(initView);
-          // LoadModel(".\\SetupParts\\articulator2.stl");
-           LoadModel(".\\SetupParts\\calibratePart.stl");
-            LoadModel(".\\SetupParts\\邱灃毅_LPlaster.stl");
-            PhongMaterial material = new PhongMaterial
+            LoadModel(".\\SetupParts\\articulator2.stl");
+            LoadModel(".\\SetupParts\\calibratePart.stl");
+
+            for (int i = 0; i != filepath.Length; ++i)
             {
-                ReflectiveColor = SharpDX.Color.Black,
-                AmbientColor = new SharpDX.Color(0.0f, 0.0f, 0.0f, 1.0f),
-                EmissiveColor = SharpDX.Color.Black,
-                SpecularColor = new SharpDX.Color(90, 90, 90, 255),
-                SpecularShininess = 60,
-                DiffuseColor = SharpDX.Color.Red
-            };
+                int isload = LoadModel(filepath[i]);
+                if (isload == 0)
+                {
+                    MeshGeometryModel3D bones = ModelGroup.Children[2 + i] as MeshGeometryModel3D;
+                    PhongMaterial bones_material = bones.Material as PhongMaterial;
+                    bones_material.DiffuseColor = SharpDX.Color.Gray;
+                }
+                MessageBox.Show(filepath[i]);
+                MessageBox.Show(isload.ToString());
+            }
+
 
             MeshGeometryModel3D model = ModelGroup.Children[1] as MeshGeometryModel3D;
-            model.Material = material;
+            PhongMaterial m = model.Material as PhongMaterial;
+            m.DiffuseColor = SharpDX.Color.Red;
+
+        
         }
         ~MainWindow()
         {
-            DobotDll.DisconnectDobot();
+            if(isConnectted)
+                DobotDll.DisconnectDobot();
         }
         private void StartGetPose()
         {
@@ -148,7 +153,7 @@ namespace DobotControl
             //  AlarmTest();
             EndTypeParams e = new EndTypeParams();
             DobotDll.GetEndEffectorParams(ref e);
-            MessageBox.Show(e.xBias.ToString() + " "+ e.yBias.ToString() + " " + e.zBias.ToString());
+            MessageBox.Show(e.xBias.ToString() + " " + e.yBias.ToString() + " " + e.zBias.ToString());
         }
 
         private void GetPose()
@@ -178,15 +183,15 @@ namespace DobotControl
                 //  pauseTime.Text = "0";
                 //}
                 var matrix = new Matrix3D();
-               
+
                 matrix.Rotate(new System.Windows.Media.Media3D.Quaternion(new Vector3D(0, 1, 0), pose.jointAngle[0]));
                 matrix.Translate(new Vector3D((pose.y - sd_origin.Y), (pose.z - sd_origin.Z), (pose.x - sd_origin.X)));
                 MeshGeometryModel3D model = ModelGroup.Children[1] as MeshGeometryModel3D;
-                           
+
                 model.Transform = new MatrixTransform3D(matrix);
 
-              
-               
+
+
             });
         }
 
@@ -273,45 +278,45 @@ namespace DobotControl
                         DobotDll.SetJOGCmd(ref currentCmd, false, ref cmdIndex);
                     }
                     break;
-                    //case "R+":
-                    //case "Joint4+":
-                    //    {
-                    //        currentCmd.isJoint = isJoint;
-                    //        currentCmd.cmd = e.ButtonState == MouseButtonState.Pressed ? (byte)JogCmdType.JogDPPressed : (byte)JogCmdType.JogIdle;
-                    //        DobotDll.SetJOGCmd(ref currentCmd, false, ref cmdIndex);
-                    //    }
-                    //    break;
-                    //case "R-":
-                    //case "Joint4-":
-                    //    {
-                    //        currentCmd.isJoint = isJoint;
-                    //        currentCmd.cmd = e.ButtonState == MouseButtonState.Pressed ? (byte)JogCmdType.JogDNPressed : (byte)JogCmdType.JogIdle;
-                    //        DobotDll.SetJOGCmd(ref currentCmd, false, ref cmdIndex);
-                    //    }
-                    //    break;
-                    //case "Gripper+":
-                    //    {
+                //case "R+":
+                //case "Joint4+":
+                //    {
+                //        currentCmd.isJoint = isJoint;
+                //        currentCmd.cmd = e.ButtonState == MouseButtonState.Pressed ? (byte)JogCmdType.JogDPPressed : (byte)JogCmdType.JogIdle;
+                //        DobotDll.SetJOGCmd(ref currentCmd, false, ref cmdIndex);
+                //    }
+                //    break;
+                //case "R-":
+                //case "Joint4-":
+                //    {
+                //        currentCmd.isJoint = isJoint;
+                //        currentCmd.cmd = e.ButtonState == MouseButtonState.Pressed ? (byte)JogCmdType.JogDNPressed : (byte)JogCmdType.JogIdle;
+                //        DobotDll.SetJOGCmd(ref currentCmd, false, ref cmdIndex);
+                //    }
+                //    break;
+                //case "Gripper+":
+                //    {
 
-                    //    }
-                    //    break;
-                    //case "Gripper-":
-                    //    {
+                //    }
+                //    break;
+                //case "Gripper-":
+                //    {
 
-                    //    }
-                    //break;
+                //    }
+                //break;
                 default:
                     break;
             }
         }
-        
-        public void LoadModel(String FilePath)
+
+        public int LoadModel(String FilePath)
         {
 
             MeshGeometryModel3D m_model = new MeshGeometryModel3D();
             //ModelGeometry已經有幾何模型存在內部 及 阻擋檔案不存在的情況
-            if (IsLoaded || !File.Exists(FilePath))
+            if (/*IsLoaded ||*/ !File.Exists(FilePath))  ///What the Fuck is IsLoaded ?????? 
             {
-                return;
+                return 1 ;
             }
             //利用helixtoolkit.wpf裡面提供的StlReader讀檔案，後續要轉成wpf.sharpdx可用的格式
             StLReader reader = new StLReader();
@@ -338,7 +343,7 @@ namespace DobotControl
             foreach (System.Windows.Media.Media3D.Model3D model in ModelContainer.Children)
             {
                 var geometryModel = model as System.Windows.Media.Media3D.GeometryModel3D;
-              
+
                 System.Windows.Media.Media3D.MeshGeometry3D mesh = geometryModel?.Geometry as System.Windows.Media.Media3D.MeshGeometry3D;
 
                 if (mesh == null)
@@ -351,27 +356,37 @@ namespace DobotControl
                         Convert.ToSingle(position.X)
                         , Convert.ToSingle(position.Y)
                         , Convert.ToSingle(position.Z)));
+
                 }
+                int i = 0;
                 foreach (Vector3D normal in mesh.Normals)
                 {
+                    //Vector3D v1 = new Vector3D((modelGeometry.Positions[i + 1].X - modelGeometry.Positions[i].X), (modelGeometry.Positions[i + 1].Y - modelGeometry.Positions[i].Y), (modelGeometry.Positions[i + 1].Z - modelGeometry.Positions[i].Z));
+                    //Vector3D v2 = new Vector3D((modelGeometry.Positions[i + 2].X - modelGeometry.Positions[i].X), (modelGeometry.Positions[i + 2].Y - modelGeometry.Positions[i].Y), (modelGeometry.Positions[i + 2].Z - modelGeometry.Positions[i].Z));
+                    //Vector3D n = Vector3D.CrossProduct(v1, v2);
+                    //modelGeometry.Normals.Add(new Vector3(
+                    //     Convert.ToSingle(n.X)
+                    //    , Convert.ToSingle(n.Y)
+                    //    , Convert.ToSingle(n.Z)));
                     modelGeometry.Normals.Add(new Vector3(
-                        Convert.ToSingle(normal.X)
-                        , Convert.ToSingle(normal.Y)
-                        , Convert.ToSingle(normal.Z)));
+                    Convert.ToSingle(normal.X)
+                    , Convert.ToSingle(normal.Y)
+                    , Convert.ToSingle(normal.Z)));
                 }
                 foreach (Int32 triangleindice in mesh.TriangleIndices)
                 {
                     modelGeometry.Indices.Add(triangleindice);
                 }
+                //    MessageBox.Show(mesh.Normals.Count.ToString());
             }
 
-          
+
+
 
             SetModelMaterial(m_model);
-            
+
             m_model.Geometry = modelGeometry;
 
-            
 
             ModelGroup.Children.Add(m_model);
 
@@ -379,7 +394,8 @@ namespace DobotControl
 
             ResetCameraPosition(bound);
 
-           
+            return 0;
+
         }
         public void SetModelMaterial(MeshGeometryModel3D model)
         {
@@ -393,57 +409,58 @@ namespace DobotControl
                 SpecularShininess = 60,
                 DiffuseColor = SharpDX.Color.Blue
             };
-           
+
             model.Material = material;
         }
         public static HelixToolkit.Wpf.SharpDX.Camera Camera1
         {
             get;
         } = new HelixToolkit.Wpf.SharpDX.OrthographicCamera();
-    
+
         public void ResetCameraPosition(Rect3D boundingBox)
         {
             //var boneCollection = MainViewModel.ProjData.BoneCollection;
             //
 
-             Point3D modelCenter = new Point3D(boundingBox.X + boundingBox.SizeX / 2.0, boundingBox.Y + boundingBox.SizeY / 2.0, boundingBox.Z + boundingBox.SizeZ / 2.0);
+            Point3D modelCenter = new Point3D(boundingBox.X + boundingBox.SizeX / 2.0, boundingBox.Y + boundingBox.SizeY / 2.0, boundingBox.Z + boundingBox.SizeZ / 2.0);
             //Point3D modelCenter = new Point3D(0,200,0);
-         
+
             HelixToolkit.Wpf.SharpDX.OrthographicCamera orthoCam1 = Camera1 as HelixToolkit.Wpf.SharpDX.OrthographicCamera;
             if (orthoCam1 != null)
             {
-                orthoCam1.Position = new Point3D(modelCenter.X, modelCenter.Y, modelCenter.Z + 1000*boundingBox.Size.Z);
+                orthoCam1.Position = new Point3D(modelCenter.X, modelCenter.Y, modelCenter.Z + 1000 * boundingBox.Size.Z);
                 orthoCam1.UpDirection = new Vector3D(0, 1, 0);
                 orthoCam1.LookDirection = new Vector3D(0, 0, -1000 * boundingBox.Size.Z);
                 orthoCam1.NearPlaneDistance = 0;
                 orthoCam1.FarPlaneDistance = 1e15;
-                orthoCam1.Width =300;
-             }
-           
+                orthoCam1.Width = 300;
+            }
+
             hVp3D.Camera = orthoCam1;
 
             HelixToolkit.Wpf.SharpDX.AmbientLight3D Light1 = new HelixToolkit.Wpf.SharpDX.AmbientLight3D();
             HelixToolkit.Wpf.SharpDX.DirectionalLight3D Light2 = new HelixToolkit.Wpf.SharpDX.DirectionalLight3D();
             HelixToolkit.Wpf.SharpDX.DirectionalLight3D Light3 = new HelixToolkit.Wpf.SharpDX.DirectionalLight3D();
-            Light1.Color = new SharpDX.Color(1.0f, 1.0f, 1.0f);
-            Light2.Color = new SharpDX.Color(0.2f, 0.2f, 0.2f);
+            Light1.Color = new SharpDX.Color(0.4f, 0.4f, 0.4f);
+            Light2.Color = new SharpDX.Color(0.6f, 0.6f, 0.6f);
             Light3.Color = new SharpDX.Color(0.5f, 0.5f, 0.5f);
-            Light1.Direction = new Vector3(-10, -10, -(float)boundingBox.Size.Z);
-            Light2.Direction = new Vector3(-10, 0, -(float)boundingBox.Size.Z);
-            Light3.Direction = new Vector3(-1000, -(float)boundingBox.Size.Y, -30);
-            hVp3D.Items.Add(Light1);
+            Light1.Direction = new Vector3(-10, -1000, -(float)boundingBox.Size.Z);
+            Light2.Direction = new Vector3( 1000, 0, -(float)boundingBox.Size.Z);
+            Light3.Direction = new Vector3(-1000, -(float)boundingBox.Size.Y, 300);
 
+            hVp3D.Items.Add(Light1);
             hVp3D.Items.Add(Light2);
             hVp3D.Items.Add(Light3);
 
         }
+   
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
             DobotDll.ResetPose(false, 0, 0);
             DobotDll.GetPose(ref pose);
-            sd_origin = new Point3D(pose.x, pose.y, pose.z);        
+            sd_origin = new Point3D(pose.x, pose.y, pose.z);
         }
 
         //public void load3dModel()

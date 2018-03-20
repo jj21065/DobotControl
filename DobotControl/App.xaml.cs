@@ -24,12 +24,8 @@ namespace DobotControl
             //}
           //  MessageBox.Show(e.Args.Length.ToString());
             
-            
+         
             MainWindow mainWindow = new MainWindow(e.Args);
-            //if (startMinimized)
-            {
-                mainWindow.WindowState = WindowState.Minimized;
-            }
             mainWindow.Show();
         }
 
